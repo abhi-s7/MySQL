@@ -1,0 +1,243 @@
+DDL - Data Defination Language
+
+CREATING TABLES
+MODIFYING TABLES
+DELETING TABLES
+DELETING ALL DATA FROM TABLES
+
+
+SQL datatypes
+
+:: NUMERIC DATA TYPES
+
+INT: Whole Numbers
+
+FLOAT(M,D) : Decimal numbers (approxiamate)
+where M - Define how long that number is
+D - How many numbers go off the decimal point
+
+e.g. 1.78 -> M = 3, D = 2
+
+DECIMAL(M,D) - Same as float but precise
+
+Float allows rounding of numbers while decimal will not allow rounding
+
+:: NON-NUMERIC DATA TYPES
+
+CHAR(N) - Fixed length character e.g. currency USD, INR
+
+VARCHAR(N) - Varying length character (upto  N ) e.g. N = 10 therefore it could hold any strin with a length up to a maximum 10 characters
+
+ENUM('M', 'F'): Value from a defined list. e.g. for gender or yes or no column
+
+BOOLEAN : True or False column
+
+:: DATE AND TIME TYPES
+
+DATE : Date(YYYY-MM-DD)
+
+DATETIME : Date and the time (YYYY-MM-DD HH-MM-SS)
+
+TIME: Time (HHH-MM-SS)
+- It is different from Time in DATETIME because it can hold a value which is more than ninety nine point nine nine hours
+e.g. time b/w two events took place
+
+YEAR : Year (YYYY)
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:: PRIMARY KEY
+
+- A primary key is a column, or set of columns, which uniquely identifies a record withing a table.
+
+- It must be unique
+
+- Cannot be null
+
+- One table can have only one primary key (it can be made from multiple columns but must be unique)
+
+:: FOREIGN KEY
+
+- A foreign key is used to link two tables together.
+
+- A foreign key is a column whose values match the values of another tables primary key column
+
+- The table with the primary key is called the referece, or parent table
+
+- The table with foreign key is called the child table
+
+- A table can have multiple foreign keys.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: DATA Manipulation Language : Concerned with inserting, updating and deleting of data in tables
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Normalizations
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+1NF : For a table to be in 1NF following conditions should be met:
+1. No duplicate Rows
+2. No multiple values inside a column
+3. There should be a PK
+
+2NF: For a Database to in the 2nd normal form two conditions should met:
+
+1. It should already be in 1st normal form
+2. Non primary column should be dependent on the whole of the primary key.
+
+E.g. in this Student table where columns are: Name, Subject, Grade, Age
+
+Where Name and Subject together forms a primary key, thus Grade is dependent both on Student name and Subject but Age is only dependent on Student name not on Grades but name+subject is the primary key therefore it is not in 2nd normal form.
+
+Thus extract Age column into another table where primary key is Student name and thus Age is solely dependent on the primary key.
+
+3NF: For 3rd normal form they should meet two conditions:
+
+1. They conform to 2NF
+2. Every column that is not a primary key must only dependent on the whole of the primary key.
+
+:: This sounds like 2NF but non-primary key columns cannot depend on any other column
+
+e.g. Subject, Year, Star Pupil, DOB are 4 columns where Subject + Year makes the primary key. Here Star Pupil is both dependent on PK as well as DOB. But DOB is also dependent on Star Pupil as DOB is of Pupil only. Thus DOB is both dependent on PK and Other non-PK column and that should not be in 3NF
+
+To make this table into 3NF we have to make two tables and separate the DOB from the first table. Thus first table contains Subject, Year and Star Pupil and the second table contains: Star Pupil and DOB this way non-PK columns are only dependent on the whole of the PK
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Relationships
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Relationships in database : Link b/w tables within the database.
+
+These tables are related via Primary and Foreign keys.
+
+3 types:
+
+1. one to one: 
+2. one to many
+3. many to many
+
+One to One Relationship: Key to one table appears no more than once as the key in another table and vice versa.
+
+e.g. One HOD per one department. One HOD cannot be the head of another department.
+e.g. 2. Products table from coffee_store DB can relate to product_details table where it will hold all the details of a single product but it will be related to only one product at a time.
+
+Relational Diagram - horizontal line b/w 2 tables and 2 vertical lines on each side of the table specifying 1, 0..1 which means
+One entry in products table would have 0 to maximum of one entry in the product_details table
+*************************************
+One to many : Where a primary key of one table can be in multiple rows of foreign key column of another table.
+
+e.g. PK of Customers can be in multiples rows of FK of Orders [FK of orders would be PK of customers]
+
+i.e. The customer can place many orders but a particular order can only be related to one customer
+
+Therefore cust_id in Customers table would show many times in Orders table as it is foreign key in orders table but order_id[PK] will only relate to one customer.
+***************************************
+Many to Many Relationships: Most complicated type and most common
+
+Where two tables can have many instances of each other.
+e.g. Two tables in coffee_store DB have M-M Relationship i.e. Products and Orders table
+
+1. There can be multiple orders from different customers for the same product thus same product have multiple order_id
+2. There can multiple products bought from the same customer thus multiple products for a single order_id.
+
+
+
+Representation: Introduce Third table : Junction Table.
+This only holds the FK to both the table. So it contains
+product_id as FK to Products table &
+order_id as FK to Orders table
+
+e.g.
+
+If a customer bought two coffee 1.filter 2. cappuccino which represents one order thus 1 entry should be in Orders tables and multiple entries in order_details table because one order_id would have two product_id as there are two coffees bought.
+
+Same is with the case of single coffee bought by multiple customers for multiple order_id. Thus one product_id and multiple order_id in Order_details table.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Constraints
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+They are placed on columns within tables and they used to restrict what values can be entered into these tables.
+Types:
+
+1. Datatype : int, Char , Varchar, float, decimal
+2. NOT NULL : A column cannot contain null values.
+3. UNIQUE : A column cannot contain any duplicate values of data in a row.
+4. PRIMARY KEY: A column that uniquely identifies each row of data.
+5. FOREIGN KEY: A column which is related to a primary key in another table
+	We use PK and FK to link two tables
+6. CHECK: Controls the values that can be inserted ino a column.
+	E.G. CHECK(ratings BETWEEN 0 AND 100)
+7. DEFAULT: If no values is inserted into a column, you can set a default value.
+	E.G. email DEFAULT 'No Data'
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Aggregate Functions
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+- Perform a calculations on data within a column and *returns one result row*.
+- Can use GROUP BY clauses to group the results by one (or more ) columns
+- Can use HAVING clause in a similar way to a WHERE clause in a SELECT statement to filter the results set.
+
+Aggregate functions like - COUNT, MIN, MAX, AVERAGE
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Sub queries
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Subqueries are queries nested within other queries
+
+e.g. SELECT id, start_time FROM screenings WHERE film_id IN
+	(SELECT id FROM films # this is subquery
+	WHERE length_min > 120)
+	;
+
+Can be used in SELECT, INSERT, UPDATE or DELETE query.
+The nested query can be in the WHERE clause or the FROM.
+Two types :
+a. Non-Correlated
+b. Correlated
+
+Non-Correlated SubQuery
+
+The inner query can run independently of the outer query.
+Inner query runs first & only once and produces a result set, which is then used by the outer query.
+In the above example (SELECT id FROM films # this is subquery
+	WHERE length_min > 120) can also be run independently
+And this is going to retun a set of id's where film_length > 120 and then outer query will consume this result and display id, start_time from screenings
+
+
+Correlated SubQuery
+
+- The inner query can't run independently of the outer query.
+	SELECT SCREENING_ID, CUSTOMER_ID,
+	(SELECT COUNT(SEAT_ID)
+	FROM RESERVED_SEAT WHERE BOOKING_ID = B.ID
+	FROM BOOKINGS B;
+- The inner query runs for every row in the outer query, i.e. inner query runs multiple times
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+COALESCE - to display first non empty null value
+select customer_id,customer_name,
+case
+  when email_id is null and address is null then 'NA'
+  when address is null then email_id
+  else address
+end as 'CONTACT_DETAILS'
+FROM customers
+order by customer_id;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+The IIF() function returns a value if a condition is TRUE, or another value if a condition is FALSE.
+IIF(condition, value_if_true, value_if_false)
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+The SQL CASE Statement
+The CASE statement goes through conditions and returns a value when the first condition is met (like an IF-THEN-ELSE statement). So, once a condition is true, it will stop reading and return the result. If no conditions are true, it returns the value in the ELSE clause.
+
+If there is no ELSE part and no conditions are true, it returns NULL.
+
+CASE Syntax
+CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    WHEN conditionN THEN resultN
+    ELSE result
+END;
